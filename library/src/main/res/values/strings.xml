@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<resources>
+
+    <string name="message_request_read_files_permission">We need access your files in order to give you a better experience</string>
+    <string name="button_grant">Grant</string>
+</resources>
+   
