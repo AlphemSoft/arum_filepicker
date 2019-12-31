@@ -6,11 +6,11 @@ import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.omensoft.arum.filepicker.databinding.ItemAudioBinding
+import com.omensoft.arum.filepicker.databinding.ItemDocumentBinding
 import com.omensoft.arum.filepicker.databinding.ItemPictureBinding
+import com.omensoft.arum.filepicker.databinding.ItemVideoBinding
 import com.omensoft.arum.filepicker.enums.ContentType
-import com.omensoft.arum.filepicker.list.viewholder.AudioViewHolder
-import com.omensoft.arum.filepicker.list.viewholder.FileViewHolder
-import com.omensoft.arum.filepicker.list.viewholder.PictureViewHolder
+import com.omensoft.arum.filepicker.list.viewholder.*
 import com.omensoft.arum.filepicker.model.AbstractFile
 
 class FileAdapter(private val onItemSelected: OnItemSelected): RecyclerView.Adapter<FileViewHolder<*, *>>() {
@@ -37,7 +37,6 @@ class FileAdapter(private val onItemSelected: OnItemSelected): RecyclerView.Adap
         diffUtil.dispatchUpdatesTo(this)
     }
 
-    @SuppressWarnings("unchecked")
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FileViewHolder<*, *> {
         val inflater = LayoutInflater.from(parent.context)
         val dataBinding: ViewDataBinding
@@ -52,9 +51,18 @@ class FileAdapter(private val onItemSelected: OnItemSelected): RecyclerView.Adap
                 PictureViewHolder(dataBinding)
             }
 
+            ContentType.VIDEO.type.hashCode() ->{
+                dataBinding = ItemVideoBinding.inflate(inflater, parent, false)
+                VideoViewHolder(dataBinding)
+            }
+
+            ContentType.DOCUMENT.type.hashCode() ->{
+                dataBinding = ItemDocumentBinding.inflate(inflater, parent, false)
+                GenericFileViewHolder(dataBinding)
+            }
+
             else ->{
-                dataBinding = ItemAudioBinding.inflate(inflater, parent, false)
-                AudioViewHolder(dataBinding)
+                throw IllegalArgumentException("No content type found with $viewType hash code")
             }
         }
     }

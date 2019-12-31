@@ -19,7 +19,7 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.omensoft.arum.filepicker.databinding.FragmentFilepickerBinding
 import com.omensoft.arum.filepicker.enums.ContentType
 import com.omensoft.arum.filepicker.model.Audio
-import com.omensoft.arum.filepicker.model.Document
+import com.omensoft.arum.filepicker.model.GenericFile
 import com.omensoft.arum.filepicker.model.Picture
 import com.omensoft.arum.filepicker.model.Video
 import com.omensoft.arum.filepicker.paging.ContentPageAdapter
@@ -64,9 +64,9 @@ class ArumFilePicker: BottomSheetDialogFragment(), FileProvider.FileProviderCall
             val size = Point()
             w?.defaultDisplay?.getSize(size)
             val height = size.y
-            mDataBinding.llContainer.minHeight = height - getNavigationBarHeight()
+            mDataBinding.clContainer.minHeight = height - getNavigationBarHeight()
             behavior.peekHeight = 0
-            mDataBinding.llContainer.invalidate()
+            mDataBinding.clContainer.invalidate()
         }
     }
 
@@ -75,7 +75,9 @@ class ArumFilePicker: BottomSheetDialogFragment(), FileProvider.FileProviderCall
             val contentPageAdapter = ContentPageAdapter(it)
             val pages = ArrayList<ShowableFragment>()
             pages.add(ShowableFragment(ContentType.PICTURE, ContentPageFragment.getInstance(ContentType.PICTURE), "PictureFragment", R.drawable.ic_image))
+            pages.add(ShowableFragment(ContentType.VIDEO, ContentPageFragment.getInstance(ContentType.VIDEO), "VideoFragment", R.drawable.ic_video))
             pages.add(ShowableFragment(ContentType.AUDIO, ContentPageFragment.getInstance(ContentType.AUDIO), "AudioFragment", R.drawable.ic_music_circle))
+            pages.add(ShowableFragment(ContentType.DOCUMENT, ContentPageFragment.getInstance(ContentType.DOCUMENT), "DocumentFragment", R.drawable.ic_file_document_box))
             contentPageAdapter.addPages(pages)
             mDataBinding.vp2Pages.adapter = contentPageAdapter
             mDataBinding.vp2Pages.registerOnPageChangeCallback(object: ViewPager2.OnPageChangeCallback(){
@@ -85,8 +87,9 @@ class ArumFilePicker: BottomSheetDialogFragment(), FileProvider.FileProviderCall
                 }
             })
             mViewModel.currentContentType.value = pages[0].contentType
-            val icons = arrayOf(ContextCompat.getDrawable(it.applicationContext, R.drawable.ic_image),
-                    ContextCompat.getDrawable(it.applicationContext, R.drawable.ic_music_circle))
+            val icons = pages.map {showableFragment->
+                ContextCompat.getDrawable(context?.applicationContext!!, showableFragment.icon)
+            }
 
             val mediator = TabLayoutMediator(mDataBinding.tabLayout, mDataBinding.vp2Pages, TabLayoutMediator.TabConfigurationStrategy { tab, position ->
                 tab.icon = icons[position]
@@ -113,10 +116,10 @@ class ArumFilePicker: BottomSheetDialogFragment(), FileProvider.FileProviderCall
                     ContentType.PICTURE -> mViewModel.selectedPictures
                     ContentType.AUDIO -> mViewModel.selectedAudios
                     ContentType.VIDEO -> mViewModel.selectedVideos
-                    ContentType.DOCUMENT -> mViewModel.documents
+                    ContentType.DOCUMENT -> mViewModel.selectedDocuments
                 }
-                selectedList.observe(this, Observer {
-                    it?.let {safeSelectedList->
+                selectedList.observe(this, Observer {list->
+                    list?.let {safeSelectedList->
                         mDataBinding.fabSend.visibility = if (safeSelectedList.isEmpty()) View.GONE else View.VISIBLE
                     }
                 })
@@ -140,8 +143,8 @@ class ArumFilePicker: BottomSheetDialogFragment(), FileProvider.FileProviderCall
         mViewModel.audios.value = resources
     }
 
-    override fun dispatchDocumentList(resources: List<Document>) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun dispatchDocumentList(resources: List<GenericFile>) {
+        mViewModel.documents.value = resources
     }
 
     override fun dispatchPictureList(resources: List<Picture>) {
@@ -149,6 +152,6 @@ class ArumFilePicker: BottomSheetDialogFragment(), FileProvider.FileProviderCall
     }
 
     override fun dispatchVideoList(resources: List<Video>) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        mViewModel.videos.value = resources
     }
 }

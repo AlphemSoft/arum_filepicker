@@ -5,10 +5,10 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:orientation="vertical" android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/ll_container">
+        android:id="@+id/cl_container">
 
         <com.omensoft.arum.filepicker.decoration.RoundedImageView
-            android:id="@+id/iv_picture_content"
+            android:id="@+id/iv_content"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:background="@drawable/shape_rounded_corners"
@@ -31,9 +31,9 @@
             android:textSize="12sp"
             android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/iv_picture_content"
+            app:layout_constraintEnd_toEndOf="@+id/iv_content"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/iv_picture_content"
+            app:layout_constraintTop_toTopOf="@+id/iv_content"
             tools:ignore="HardcodedText" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

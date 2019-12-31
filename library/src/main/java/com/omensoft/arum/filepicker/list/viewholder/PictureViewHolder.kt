@@ -16,8 +16,8 @@ class PictureViewHolder(itemPictureBinding: ItemPictureBinding)
             mDataBinding.tvIndexIndicator.visibility = View.GONE
         }
 
-        Glide.with(mContext).load(file.uri).into(mDataBinding.ivPictureContent)
-        mDataBinding.llContainer.setOnClickListener {
+        Glide.with(mContext).load(file.uri).into(mDataBinding.ivContent)
+        mDataBinding.clContainer.setOnClickListener {
             onItemSelectListener.onItemSelected(file)
         }
     }

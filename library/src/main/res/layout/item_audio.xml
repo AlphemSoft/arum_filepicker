@@ -5,11 +5,22 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:id="@+id/cl_audio_container">
+        android:layout_height="wrap_content"
+        android:id="@+id/cl_container">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/view_foreground"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:orientation="horizontal"
+            app:srcCompat="?attr/selectableItemBackgroundBorderless"/>
 
         <androidx.appcompat.widget.AppCompatCheckBox
-            android:id="@+id/cb_item_selected"
+            android:id="@+id/cb_selected_item"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -19,8 +30,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/guideline4"
-            app:layout_constraintTop_toTopOf="parent"
-            android:checked="true"/>
+            app:layout_constraintTop_toTopOf="parent"/>
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tv_file_name"
@@ -66,16 +76,19 @@
             android:orientation="vertical"
             app:layout_constraintGuide_begin="48dp" />
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tv_description"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
             android:text="Description"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/tv_file_name"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/tv_file_name"
             app:layout_constraintTop_toBottomOf="@+id/tv_file_name"
-            tools:ignore="HardcodedText" />
+            tools:ignore="HardcodedText"
+            app:textAllCaps="true"/>
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline4"

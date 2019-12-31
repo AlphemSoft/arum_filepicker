@@ -16,7 +16,7 @@ class FilePickerViewModel: ViewModel(){
     val permissionState: MutableLiveData<Usable<Int>> = MutableLiveData()
     val audios: MutableLiveData<List<Audio>> = MutableLiveData()
     val pictures: MutableLiveData<List<Picture>> = MutableLiveData()
-    val documents: MutableLiveData<List<Document>> = MutableLiveData()
+    val documents: MutableLiveData<List<GenericFile>> = MutableLiveData()
     val videos: MutableLiveData<List<Video>> = MutableLiveData()
 
     init {
@@ -47,7 +47,8 @@ class FilePickerViewModel: ViewModel(){
 
         val result = ArrayList<AbstractFile<*>>()
         val selected = mutableList.filter { picture ->
-            selectedFiles.contains(picture.uri)
+            val contains = selectedFiles.contains(picture.uri)
+            contains
         }
         result.addAll(mutableList.minus(selected))
         selected.forEachIndexed{index: Int, itemSelected: AbstractFile<*> ->

@@ -5,6 +5,7 @@ import android.content.ContentUris
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.provider.MediaStore
+import android.webkit.MimeTypeMap
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContentResolverCompat
 import androidx.core.content.ContextCompat
@@ -14,10 +15,9 @@ import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.OnLifecycleEvent
 import com.omensoft.arum.filepicker.model.Audio
-import com.omensoft.arum.filepicker.model.Document
+import com.omensoft.arum.filepicker.model.GenericFile
 import com.omensoft.arum.filepicker.model.Picture
 import com.omensoft.arum.filepicker.model.Video
-
 class FileProvider private constructor(
         private val mActivity: FragmentActivity,
         private val fileProviderCallback: FileProviderCallback
@@ -32,7 +32,7 @@ class FileProvider private constructor(
     interface FileProviderCallback{
         fun onPermissionChange(permissionState: PermissionState)
         fun dispatchAudioList(resources: List<Audio>)
-        fun dispatchDocumentList(resources: List<Document>)
+        fun dispatchDocumentList(resources: List<GenericFile>)
         fun dispatchPictureList(resources: List<Picture>)
         fun dispatchVideoList(resources: List<Video>)
     }
@@ -68,6 +68,8 @@ class FileProvider private constructor(
                 fileProviderCallback.onPermissionChange(PermissionState.GRANTED)
                 providePictures()
                 provideAudios()
+                provideVideos()
+                provideMisc()
             }
             PackageManager.PERMISSION_DENIED->  {
                 fileProviderCallback.onPermissionChange(PermissionState.DENIED)
@@ -125,6 +127,116 @@ class FileProvider private constructor(
         }
 
         fileProviderCallback.dispatchAudioList(audioList.toList())
+    }
+
+    @SuppressLint("InlinedApi")
+    private fun provideVideos() {
+        val audioList = mutableListOf<Video>()
+
+        val projection = arrayOf(
+                MediaStore.Video.Media._ID,
+                MediaStore.Video.Media.DISPLAY_NAME,
+                MediaStore.Video.Media.SIZE,
+                MediaStore.Video.Media.DURATION,
+                MediaStore.Video.Media.DATE_ADDED
+        )
+
+        val legacyQuery = ContentResolverCompat.query(
+                mActivity.contentResolver,
+                MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
+                projection,
+                null,
+                null,
+                null,
+                null
+        )
+
+        legacyQuery?.let { cursor ->
+            // Cache column indices.
+            val idColumn = cursor.getColumnIndexOrThrow(MediaStore.Video.Media._ID)
+            val nameColumn =
+                    cursor.getColumnIndexOrThrow(MediaStore.Video.Media.DISPLAY_NAME)
+            val sizeColumn = cursor.getColumnIndexOrThrow(MediaStore.Video.Media.SIZE)
+            val durationColumn= cursor.getColumnIndexOrThrow(MediaStore.Video.Media.DURATION)
+            val addedColumn= cursor.getColumnIndexOrThrow(MediaStore.Video.Media.DATE_ADDED)
+
+            while (cursor.moveToNext()) {
+                val id = cursor.getLong(idColumn)
+                val name = cursor.getString(nameColumn)
+                val size = cursor.getLong(sizeColumn)
+                val duration = cursor.getLong(durationColumn)
+                val contentUri: Uri = ContentUris.withAppendedId(
+                        MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
+                        id
+                )
+                val added = cursor.getLong(addedColumn)
+                audioList.add(Video(id, contentUri, name, "none", false, size, duration, added))
+            }
+        }
+
+        fileProviderCallback.dispatchVideoList(audioList.toList())
+    }
+
+    @SuppressLint("InlinedApi")
+    private fun provideMisc() {
+        val miscList = mutableListOf<GenericFile>()
+
+        val projection = arrayOf(
+                MediaStore.Files.FileColumns._ID,
+                MediaStore.Files.FileColumns.TITLE,
+                MediaStore.Files.FileColumns.SIZE,
+                MediaStore.Files.FileColumns.DATE_ADDED,
+                MediaStore.Files.FileColumns.MIME_TYPE
+        )
+
+        val supportedFileTypes =
+                arrayOf("doc", "docx", "ppt", "pptx", "xls", "xlsx", "pdf")
+        val selectionArgs = arrayOfNulls<String>(supportedFileTypes.size)
+        var selectionMimeType: String? = null
+        var i = 0
+        var selectionBuilder = StringBuilder(MediaStore.Files.FileColumns.MIME_TYPE)
+        while (i < supportedFileTypes.size) {
+            selectionBuilder.append("=? OR ")
+            selectionBuilder.append(MediaStore.Files.FileColumns.MIME_TYPE)
+            selectionArgs[i] = MimeTypeMap.getSingleton()
+                    .getMimeTypeFromExtension(supportedFileTypes[i])
+            i++
+        }
+
+        val legacyQuery = ContentResolverCompat.query(
+                mActivity.contentResolver,
+                MediaStore.Files.getContentUri("external"),
+                projection,
+                selectionBuilder.toString(),
+                selectionArgs,
+                null,
+                null
+        )
+
+        legacyQuery?.let { cursor ->
+            // Cache column indices.
+            val idColumn = cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns._ID)
+            val nameColumn =
+                    cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.TITLE)
+            val sizeColumn = cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.SIZE)
+            val addedColumn= cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.DATE_ADDED)
+            val mimeTypeColumn= cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.MIME_TYPE)
+
+            while (cursor.moveToNext()) {
+                val id = cursor.getLong(idColumn)
+                val name = cursor.getString(nameColumn)
+                val size = cursor.getLong(sizeColumn)
+                val contentUri: Uri = ContentUris.withAppendedId(
+                        MediaStore.Files.getContentUri("external"),
+                        id
+                )
+                val added = cursor.getLong(addedColumn)
+                val mimeType = cursor.getString(mimeTypeColumn)
+                miscList.add(GenericFile(id, contentUri, name, "none", false, size, added, mimeType))
+            }
+        }
+
+        fileProviderCallback.dispatchDocumentList(miscList.toList())
     }
 
     fun requestPermission(){
