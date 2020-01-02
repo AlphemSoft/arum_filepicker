@@ -56,7 +56,7 @@ class FileAdapter(private val onItemSelected: OnItemSelected): RecyclerView.Adap
                 VideoViewHolder(dataBinding)
             }
 
-            ContentType.DOCUMENT.type.hashCode() ->{
+            ContentType.GENERIC_FILE.type.hashCode() ->{
                 dataBinding = ItemDocumentBinding.inflate(inflater, parent, false)
                 GenericFileViewHolder(dataBinding)
             }

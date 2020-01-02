@@ -4,5 +4,5 @@ enum class ContentType(val type: String) {
     PICTURE("PICTURE"),
     AUDIO("AUDIO"),
     VIDEO("VIDEO"),
-    DOCUMENT("DOCUMENT"),
+    GENERIC_FILE("GENERIC_FILE"),
 }

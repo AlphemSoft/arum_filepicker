@@ -16,7 +16,7 @@ class FilePickerViewModel: ViewModel(){
     val permissionState: MutableLiveData<Usable<Int>> = MutableLiveData()
     val audios: MutableLiveData<List<Audio>> = MutableLiveData()
     val pictures: MutableLiveData<List<Picture>> = MutableLiveData()
-    val documents: MutableLiveData<List<GenericFile>> = MutableLiveData()
+    val genericFiles: MutableLiveData<List<GenericFile>> = MutableLiveData()
     val videos: MutableLiveData<List<Video>> = MutableLiveData()
 
     init {
@@ -25,18 +25,34 @@ class FilePickerViewModel: ViewModel(){
 
     val showablePictures = Transformations.map(pictures, ::transformFiles)
     val showableAudios = Transformations.map(audios, ::transformFiles)
-    val showableDocuments = Transformations.map(documents, ::transformFiles)
     val showableVideos = Transformations.map(videos, ::transformFiles)
+    val showableGenericFiles = Transformations.map(genericFiles, ::transformFiles)
 
-    val selectedPictures = Transformations.map(pictures, ::transformSelectedPictures)
-    val selectedAudios = Transformations.map(audios, ::transformSelectedPictures)
-    val selectedDocuments = Transformations.map(documents, ::transformSelectedPictures)
-    val selectedVideos = Transformations.map(videos, ::transformSelectedPictures)
+    val selectedPictures = Transformations.map(pictures, ::transformSelectedFiles)
+    val selectedAudios = Transformations.map(audios, ::transformSelectedFiles)
+    val selectedVideos = Transformations.map(videos, ::transformSelectedFiles)
+    val selectedGenericFiles = Transformations.map(genericFiles, ::transformSelectedFiles)
 
-    private fun transformSelectedPictures(fileList: List<AbstractFile<*>>?): List<AbstractFile<*>>{
+    private fun transformSelectedFiles(fileList: List<AbstractFile<*>>?): List<AbstractFile<*>>{
+        val selectedFiles: List<Uri>? = getSelectedFileList(fileList)
         return fileList?.filter {
-            selectedFiles.contains(it.uri)
+            selectedFiles?.contains(it.uri)?:false
         }?:ArrayList()
+    }
+
+    private fun getSelectedFileList(fileList: List<AbstractFile<*>>?): List<Uri>? {
+        var selectedFiles: List<Uri>? = null
+        fileList?.let {
+            if (fileList.isNotEmpty()) {
+                selectedFiles = when (fileList[0].contentType) {
+                    ContentType.PICTURE -> _selectedPictures
+                    ContentType.VIDEO -> _selectedVideos
+                    ContentType.AUDIO -> _selectedAudios
+                    ContentType.GENERIC_FILE -> _selectedGenericFiles
+                }
+            }
+        }
+        return selectedFiles
     }
 
     private fun transformFiles(files: List<AbstractFile<*>>?): List<AbstractFile<*>>{
@@ -46,10 +62,11 @@ class FilePickerViewModel: ViewModel(){
         }
 
         val result = ArrayList<AbstractFile<*>>()
+        val selectedFiles = getSelectedFileList(files)
         val selected = mutableList.filter { picture ->
-            val contains = selectedFiles.contains(picture.uri)
-            contains
+            selectedFiles?.contains(picture.uri)?:false
         }
+
         result.addAll(mutableList.minus(selected))
         selected.forEachIndexed{index: Int, itemSelected: AbstractFile<*> ->
             itemSelected.selected = true
@@ -60,20 +77,41 @@ class FilePickerViewModel: ViewModel(){
         return result
     }
 
-    private val selectedFiles: MutableList<Uri> = ArrayList()
+    private val _selectedPictures: MutableList<Uri> = ArrayList()
+    private val _selectedVideos: MutableList<Uri> = ArrayList()
+    private val _selectedAudios: MutableList<Uri> = ArrayList()
+    private val _selectedGenericFiles: MutableList<Uri> = ArrayList()
 
     fun markItemAsSelected(file: AbstractFile<*>) {
-        if (selectedFiles.contains(file.uri)){
-            selectedFiles.remove(file.uri)
-        }else{
-            selectedFiles.add(file.uri)
-        }
+
+        val list: MutableLiveData<out List<AbstractFile<*>>>
+        val selectedList: MutableList<Uri>
         when(file.contentType){
-            ContentType.PICTURE -> pictures.value = pictures.value
-            ContentType.AUDIO -> audios.value = audios.value
-            ContentType.VIDEO -> videos.value = videos.value
-            ContentType.DOCUMENT -> documents.value = documents.value
+            ContentType.PICTURE -> {
+                selectedList = _selectedPictures
+                list = pictures
+            }
+            ContentType.AUDIO -> {
+                selectedList = _selectedAudios
+                list = audios
+            }
+            ContentType.VIDEO -> {
+                selectedList = _selectedVideos
+                list = videos
+            }
+            ContentType.GENERIC_FILE -> {
+                selectedList = _selectedGenericFiles
+                list = genericFiles
+            }
         }
+
+        if (selectedList.contains(file.uri)){
+            selectedList.remove(file.uri)
+        }else{
+            selectedList.add(file.uri)
+        }
+
+        list.value = list.value
 
     }
 }

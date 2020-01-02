@@ -18,7 +18,6 @@ import com.omensoft.arum.filepicker.enums.ContentType.*
 import com.omensoft.arum.filepicker.list.FileAdapter
 import com.omensoft.arum.filepicker.model.AbstractFile
 import com.omensoft.arum.filepicker.viewmodel.FilePickerViewModel
-import java.util.*
 
 class ContentPageFragment: Fragment(), FileAdapter.OnItemSelected {
     private lateinit var mDataBinding: FragmentContentPageBinding
@@ -52,7 +51,7 @@ class ContentPageFragment: Fragment(), FileAdapter.OnItemSelected {
         mDataBinding.rvContent.adapter = mFileAdapter
         (mDataBinding.rvContent.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
         mDataBinding.rvContent.layoutManager = when(mContentType){
-            DOCUMENT,AUDIO ->
+            GENERIC_FILE,AUDIO ->
                 LinearLayoutManager(this.activity, RecyclerView.VERTICAL, false)
             PICTURE, VIDEO ->
                 GridLayoutManager(this.activity, 3)
@@ -84,7 +83,7 @@ class ContentPageFragment: Fragment(), FileAdapter.OnItemSelected {
             PICTURE -> mViewModel.showablePictures
             AUDIO -> mViewModel.showableAudios
             VIDEO -> mViewModel.showableVideos
-            DOCUMENT -> mViewModel.showableDocuments
+            GENERIC_FILE -> mViewModel.showableGenericFiles
         }
 
         fileList.observe(this, Observer {

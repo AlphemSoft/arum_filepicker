@@ -77,7 +77,7 @@ class ArumFilePicker: BottomSheetDialogFragment(), FileProvider.FileProviderCall
             pages.add(ShowableFragment(ContentType.PICTURE, ContentPageFragment.getInstance(ContentType.PICTURE), "PictureFragment", R.drawable.ic_image))
             pages.add(ShowableFragment(ContentType.VIDEO, ContentPageFragment.getInstance(ContentType.VIDEO), "VideoFragment", R.drawable.ic_video))
             pages.add(ShowableFragment(ContentType.AUDIO, ContentPageFragment.getInstance(ContentType.AUDIO), "AudioFragment", R.drawable.ic_music_circle))
-            pages.add(ShowableFragment(ContentType.DOCUMENT, ContentPageFragment.getInstance(ContentType.DOCUMENT), "DocumentFragment", R.drawable.ic_file_document_box))
+            pages.add(ShowableFragment(ContentType.GENERIC_FILE, ContentPageFragment.getInstance(ContentType.GENERIC_FILE), "DocumentFragment", R.drawable.ic_file_document_box))
             contentPageAdapter.addPages(pages)
             mDataBinding.vp2Pages.adapter = contentPageAdapter
             mDataBinding.vp2Pages.registerOnPageChangeCallback(object: ViewPager2.OnPageChangeCallback(){
@@ -116,7 +116,7 @@ class ArumFilePicker: BottomSheetDialogFragment(), FileProvider.FileProviderCall
                     ContentType.PICTURE -> mViewModel.selectedPictures
                     ContentType.AUDIO -> mViewModel.selectedAudios
                     ContentType.VIDEO -> mViewModel.selectedVideos
-                    ContentType.DOCUMENT -> mViewModel.selectedDocuments
+                    ContentType.GENERIC_FILE -> mViewModel.selectedGenericFiles
                 }
                 selectedList.observe(this, Observer {list->
                     list?.let {safeSelectedList->
@@ -144,7 +144,7 @@ class ArumFilePicker: BottomSheetDialogFragment(), FileProvider.FileProviderCall
     }
 
     override fun dispatchDocumentList(resources: List<GenericFile>) {
-        mViewModel.documents.value = resources
+        mViewModel.genericFiles.value = resources
     }
 
     override fun dispatchPictureList(resources: List<Picture>) {
