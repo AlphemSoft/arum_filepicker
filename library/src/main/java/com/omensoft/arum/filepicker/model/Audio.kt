@@ -18,4 +18,13 @@ class Audio(
     }
 
 
+    override fun equals(other: Any?): Boolean {
+        return other is Audio && other.id == id && other.selected == selected && other.added == added
+    }
+
+    override fun hashCode(): Int {
+        var result = super.hashCode()
+        result = 31 * result + duration.hashCode()
+        return result
+    }
 }

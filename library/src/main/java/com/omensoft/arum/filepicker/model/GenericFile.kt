@@ -16,4 +16,16 @@ class GenericFile(
     override fun copy(): GenericFile {
         return GenericFile(id, uri, name, extension, selected, size, added, mimeType)
     }
+
+    override fun equals(other: Any?): Boolean {
+        return other is GenericFile && other.id == id && other.selected == selected && other.added == added
+    }
+
+    override fun hashCode(): Int {
+        var result = super.hashCode()
+        result = 31 * result + mimeType.hashCode()
+        return result
+    }
+
+
 }

@@ -27,16 +27,15 @@ class ContentPageFragment: Fragment(), FileAdapter.OnItemSelected {
     private lateinit var mContentType: ContentType
     private lateinit var mFileAdapter: FileAdapter
     companion object {
-
         fun getInstance(contentType: ContentType): ContentPageFragment =
                 ContentPageFragment().apply {
                     mContentType = contentType
                 }
     }
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         mViewModel = ViewModelProviders.of(this.activity!!)[FilePickerViewModel::class.java]
         mDataBinding = FragmentContentPageBinding.inflate(inflater, container, false)

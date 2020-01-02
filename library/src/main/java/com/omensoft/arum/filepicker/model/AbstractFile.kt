@@ -19,19 +19,19 @@ abstract class AbstractFile<out T: AbstractFile<T>>(
     }
 
     override fun compareTo(other: AbstractFile<*>): Int {
-return when{
-    other.id > id -> 1
-    other.id < id -> -1
-    other.id == id -> 0
-    else -> -1
-}
-}
+        return when{
+            other.id > id -> 1
+            other.id < id -> -1
+            other.id == id -> 0
+            else -> -1
+        }
+    }
 
-abstract fun copy(): T
+    abstract fun copy(): T
 
-override fun equals(other: Any?): Boolean {
-    return other is AbstractFile<*> && other.id == id && other.selected == selected && other.selectedIndex == selectedIndex && other.added == added
-}
+    override fun equals(other: Any?): Boolean {
+        return other is AbstractFile<*> && other.id == id && other.selected == selected && other.selectedIndex == selectedIndex && other.added == added
+    }
 
     override fun hashCode(): Int {
         var result = id.hashCode()

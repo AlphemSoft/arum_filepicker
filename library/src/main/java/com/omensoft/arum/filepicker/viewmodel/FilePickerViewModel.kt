@@ -62,17 +62,17 @@ class FilePickerViewModel: ViewModel(){
         }
 
         val result = ArrayList<AbstractFile<*>>()
-        val selectedFiles = getSelectedFileList(files)
-        val selected = mutableList.filter { picture ->
-            selectedFiles?.contains(picture.uri)?:false
-        }
+        val selectedUriFiles = getSelectedFileList(files)
+        val selectedFiles = mutableListOf<AbstractFile<*>>()
+        result.addAll(mutableList.minus(selectedFiles))
 
-        result.addAll(mutableList.minus(selected))
-        selected.forEachIndexed{index: Int, itemSelected: AbstractFile<*> ->
-            itemSelected.selected = true
-            itemSelected.selectedIndex = index
+        selectedUriFiles?.forEachIndexed {index: Int, uri: Uri ->
+            mutableList.find { it.uri == uri }?.let {
+                it.selected = true
+                it.selectedIndex = index
+                selectedFiles.add(it)
+            }
         }
-        result.addAll(selected)
         result.sortWith(compareBy {it.id})
         return result
     }
