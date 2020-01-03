@@ -37,13 +37,15 @@ class Duration(var longDuration: Long) {
         }
     }
 
-    override fun equals(obj: Any?): Boolean {
-        var other: Duration? = null
-        if (obj is Duration) {
-            other = obj
-        } else {
-            return false
-        }
-        return other.hour == hour && other.minutes == minutes && other.seconds == seconds
+    override fun equals(other: Any?): Boolean {
+        return other is Duration && other.hour == hour && other.minutes == minutes && other.seconds == seconds
+    }
+
+    override fun hashCode(): Int {
+        var result = longDuration.hashCode()
+        result = 31 * result + hour.hashCode()
+        result = 31 * result + minutes.hashCode()
+        result = 31 * result + seconds.hashCode()
+        return result
     }
 }

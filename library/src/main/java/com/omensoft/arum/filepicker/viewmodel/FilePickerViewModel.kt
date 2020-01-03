@@ -11,17 +11,12 @@ import kotlin.collections.ArrayList
 
 class FilePickerViewModel: ViewModel(){
 
-
     val currentContentType = MutableLiveData<ContentType>()
-    val permissionState: MutableLiveData<Usable<Int>> = MutableLiveData()
+    val permissionState: MutableLiveData<Int> = MutableLiveData()
     val audios: MutableLiveData<List<Audio>> = MutableLiveData()
     val pictures: MutableLiveData<List<Picture>> = MutableLiveData()
-    val genericFiles: MutableLiveData<List<GenericFile>> = MutableLiveData()
     val videos: MutableLiveData<List<Video>> = MutableLiveData()
-
-    init {
-        permissionState.value = null
-    }
+    val genericFiles: MutableLiveData<List<GenericFile>> = MutableLiveData()
 
     val showablePictures = Transformations.map(pictures, ::transformFiles)
     val showableAudios = Transformations.map(audios, ::transformFiles)

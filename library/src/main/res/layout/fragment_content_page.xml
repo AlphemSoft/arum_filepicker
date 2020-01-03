@@ -4,7 +4,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        >
 
 
         <androidx.recyclerview.widget.RecyclerView
@@ -16,7 +17,10 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintVertical_bias="0.0"
+            android:background="@color/color_content_background"
+            android:paddingBottom="@dimen/dimen_tab_layout_height_plus_padding"
+            android:clipToPadding="false"/>
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/iv_permission_request_icon"
@@ -44,7 +48,8 @@
             android:textAlignment="center"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/iv_permission_request_icon" />
+            app:layout_constraintTop_toBottomOf="@+id/iv_permission_request_icon"
+            android:textColor="@color/color_permission_request"/>
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/bt_permission_grant"
@@ -55,7 +60,8 @@
             app:layout_constraintEnd_toEndOf="@+id/tv_permission_request_message"
             app:layout_constraintStart_toStartOf="@+id/tv_permission_request_message"
             app:layout_constraintTop_toBottomOf="@+id/tv_permission_request_message"
-            style="@style/Widget.AppCompat.Button.Borderless.Colored"/>
+            style="@style/Widget.AppCompat.Button.Borderless.Colored"
+            android:textColor="@color/color_button_main"/>
 
 
         <androidx.constraintlayout.widget.Group
@@ -68,8 +74,7 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0"
-            />
+            app:layout_constraintVertical_bias="0.0" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -1,10 +1,11 @@
-package com.omensoft.arum.filepicker
+package com.omensoft.arum.filepicker.provider
 
 import android.annotation.SuppressLint
 import android.content.ContentUris
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.provider.MediaStore
+import android.util.Log
 import android.webkit.MimeTypeMap
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContentResolverCompat
@@ -23,6 +24,10 @@ class FileProvider private constructor(
         private val fileProviderCallback: FileProviderCallback
 ): LifecycleObserver{
 
+    init {
+        Log.d("ProviderInstance", toString())
+    }
+
     enum class PermissionState(val state: Int){
         DENIED(0),
         GRANTED(1),
@@ -38,7 +43,7 @@ class FileProvider private constructor(
     }
 
     companion object{
-        private const val REQUEST_CODE = 1994
+        private const val REQUEST_CODE = 4991
         private var mInstance: FileProvider? = null
         fun getInstance(
             lifecycleOwner: LifecycleOwner,
@@ -46,22 +51,26 @@ class FileProvider private constructor(
             fileProviderCallback: FileProviderCallback
         ): FileProvider {
             mInstance ?:run {
-                mInstance = FileProvider(fragmentActivity, fileProviderCallback)
+                mInstance =
+                    FileProvider(
+                        fragmentActivity,
+                        fileProviderCallback
+                    )
             }
             lifecycleOwner.lifecycle.addObserver(mInstance!!)
             return mInstance!!
         }
 
-        fun getInstance(): FileProvider {
+        fun getInstance(): FileProvider? {
             return mInstance ?:throw IllegalStateException("Doesn't exists a created instance")
         }
     }
 
     init {
-        checkForReadStoragePermission()
+//        checkForReadStoragePermission()
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
+    @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     private fun checkForReadStoragePermission(){
         when(ContextCompat.checkSelfPermission(mActivity, android.Manifest.permission.READ_EXTERNAL_STORAGE)){
             PackageManager.PERMISSION_GRANTED->  {
@@ -78,7 +87,12 @@ class FileProvider private constructor(
                 fileProviderCallback.onPermissionChange(PermissionState.DENIED)
             }
         }
+    }
 
+    @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
+    private fun stop(){
+        mActivity.lifecycle.removeObserver(this)
+//        mInstance = null
     }
 
     @SuppressLint("InlinedApi")
@@ -192,15 +206,16 @@ class FileProvider private constructor(
         val supportedFileTypes =
                 arrayOf("doc", "docx", "ppt", "pptx", "xls", "xlsx", "pdf")
         val selectionArgs = arrayOfNulls<String>(supportedFileTypes.size)
-        var selectionMimeType: String? = null
-        var i = 0
-        var selectionBuilder = StringBuilder(MediaStore.Files.FileColumns.MIME_TYPE)
-        while (i < supportedFileTypes.size) {
-            selectionBuilder.append("=? OR ")
+        val selectionBuilder = StringBuilder()
+
+        for (index in supportedFileTypes.indices){
             selectionBuilder.append(MediaStore.Files.FileColumns.MIME_TYPE)
-            selectionArgs[i] = MimeTypeMap.getSingleton()
-                    .getMimeTypeFromExtension(supportedFileTypes[i])
-            i++
+            selectionBuilder.append("=?")
+            selectionArgs[index] = MimeTypeMap.getSingleton()
+                .getMimeTypeFromExtension(supportedFileTypes[index])
+            if (index < supportedFileTypes.size - 1){
+                selectionBuilder.append(" OR ")
+            }
         }
 
         val legacyQuery = ContentResolverCompat.query(
@@ -240,7 +255,9 @@ class FileProvider private constructor(
     }
 
     fun requestPermission(){
-        ActivityCompat.requestPermissions(mActivity, arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE), REQUEST_CODE)
+        ActivityCompat.requestPermissions(mActivity, arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE),
+            REQUEST_CODE
+        )
     }
 
     private fun startFileProviders(){

@@ -20,8 +20,8 @@ class AudioViewHolder(viewDataBinding: ItemAudioBinding)
             }
         }
         mDataBinding.tvPosition.text = (adapterPosition+1).toString()
-        mDataBinding.tvFileName.text = file.uri.toString()
-        mDataBinding.tvDescription.text = ""
+        mDataBinding.tvFileName.text = file.name
+        mDataBinding.tvDescription.text = file.extension
         mDataBinding.clContainer.setOnClickListener {
             onItemSelectListener.onItemSelected(file)
         }

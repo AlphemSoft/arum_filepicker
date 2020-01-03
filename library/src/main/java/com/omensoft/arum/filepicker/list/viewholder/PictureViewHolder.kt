@@ -10,7 +10,7 @@ class PictureViewHolder(itemPictureBinding: ItemPictureBinding)
     : FileViewHolder<ItemPictureBinding, Picture>(itemPictureBinding) {
     override fun bind(file: Picture, onItemSelectListener: FileAdapter.OnItemSelected) {
         if (file.selected){
-            mDataBinding.tvIndexIndicator.text = file.selectedIndex.toString()
+            mDataBinding.tvIndexIndicator.text = file.selectedIndex.plus(1).toString()
             mDataBinding.tvIndexIndicator.visibility = View.VISIBLE
         }else{
             mDataBinding.tvIndexIndicator.visibility = View.GONE

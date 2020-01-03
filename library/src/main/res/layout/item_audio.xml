@@ -6,23 +6,26 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/cl_container">
+        android:id="@+id/cl_container"
+        >
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/view_foreground"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:orientation="horizontal"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:orientation="horizontal"
-            app:srcCompat="?attr/selectableItemBackgroundBorderless"/>
+            app:layout_constraintVertical_bias="0.0"
+            app:srcCompat="?attr/selectableItemBackgroundBorderless" />
 
         <androidx.appcompat.widget.AppCompatCheckBox
             android:id="@+id/cb_selected_item"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginEnd="8dp"
@@ -30,25 +33,22 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/guideline4"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tv_file_name"
             android:layout_width="0dp"
-            android:layout_height="19dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginTop="8dp"
             android:text="Skrillex - Cinema"
             android:textAppearance="?android:textAppearanceSmall"
-            android:textColor="@android:color/black"
-            android:textStyle="bold"
-            android:ellipsize="marquee"
             app:layout_constraintEnd_toStartOf="@+id/guideline4"
             app:layout_constraintStart_toStartOf="@+id/guideline2"
             app:layout_constraintTop_toTopOf="parent"
-            android:singleLine="true"
-            tools:ignore="HardcodedText" />
+            tools:ignore="HardcodedText"
+            style="@style/ItemTextNameStyle"/>
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tv_position"
@@ -67,7 +67,8 @@
             app:layout_constraintEnd_toStartOf="@+id/guideline2"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="HardcodedText" />
+            tools:ignore="HardcodedText"
+            style="@style/ItemTextIndexStyle"/>
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline2"
@@ -88,14 +89,15 @@
             app:layout_constraintStart_toStartOf="@+id/tv_file_name"
             app:layout_constraintTop_toBottomOf="@+id/tv_file_name"
             tools:ignore="HardcodedText"
-            app:textAllCaps="true"/>
+            app:textAllCaps="true"
+            style="@style/ItemTextDescriptionStyle"/>
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_begin="350dp" />
+            app:layout_constraintGuide_percent="0.8" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

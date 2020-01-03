@@ -1,9 +1,12 @@
 package com.omensoft.arum.filepicker
 
 import android.os.Bundle
+import android.util.Log
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.constraintlayout.solver.Metrics
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -17,6 +20,7 @@ import com.omensoft.arum.filepicker.enums.ContentType
 import com.omensoft.arum.filepicker.enums.ContentType.*
 import com.omensoft.arum.filepicker.list.FileAdapter
 import com.omensoft.arum.filepicker.model.AbstractFile
+import com.omensoft.arum.filepicker.provider.FileProvider
 import com.omensoft.arum.filepicker.viewmodel.FilePickerViewModel
 
 class ContentPageFragment: Fragment(), FileAdapter.OnItemSelected {
@@ -64,7 +68,7 @@ class ContentPageFragment: Fragment(), FileAdapter.OnItemSelected {
 
     private fun setupObservers() {
         mViewModel.permissionState.observe(this, Observer {
-            it?.use()?.let {safePermissionState ->
+            it?.let {safePermissionState ->
                 when(safePermissionState){
                     FileProvider.PermissionState.GRANTED.state->{
                         mDataBinding.groupRequireReadPermission.visibility = View.GONE
@@ -94,7 +98,7 @@ class ContentPageFragment: Fragment(), FileAdapter.OnItemSelected {
     }
 
     private fun setupStateChangers() {
-        fileProvider = FileProvider.getInstance()
+        fileProvider = FileProvider.getInstance()!!
         mDataBinding.btPermissionGrant.setOnClickListener {
             fileProvider.requestPermission()
         }

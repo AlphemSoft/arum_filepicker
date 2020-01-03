@@ -16,7 +16,7 @@ class VideoViewHolder(dataBinding: ItemVideoBinding): FileViewHolder<ItemVideoBi
 
         mDataBinding.tvIndexIndicator.visibility = if (file.selected) View.VISIBLE else View.GONE
         mDataBinding.tvDuration.text = Duration(file.duration).toString()
-        mDataBinding.tvIndexIndicator.text = file.selectedIndex.toString()
+        mDataBinding.tvIndexIndicator.text = file.selectedIndex.plus(1).toString()
         Glide.with(mContext).load(file.uri).into(mDataBinding.ivContent)
     }
 }

@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">ArumFilePicker</string>
+    <string name="open_filepicker">Open Filepicker</string>
 </resources>
