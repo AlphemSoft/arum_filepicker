@@ -6,4 +6,6 @@
     <color name="color_content_background">#212121</color>
     <color name="color_index_indicator">#E3BE18</color>
     <color name="color_text_description">#F7D73A</color>
+    <color name="tab_selected_color">#FF5722</color>
+    <color name="tab_unselected_color">#707070</color>
 </resources>

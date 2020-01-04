@@ -7,7 +7,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/cl_container">
 
-        <com.omensoft.arum.filepicker.decoration.RoundedImageView
+        <com.github.alphemsoft.arum.filepicker.decoration.RoundedImageView
             android:id="@+id/iv_content"
             android:layout_width="0dp"
             android:layout_height="0dp"

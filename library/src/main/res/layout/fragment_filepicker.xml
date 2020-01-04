@@ -79,7 +79,7 @@
                 android:id="@+id/tabLayout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/shape_gradient_toolbar_background" />
+                android:background="@drawable/shape_gradient_toolbar_background"/>
         </com.google.android.material.card.MaterialCardView>
 
         <androidx.constraintlayout.widget.Guideline
