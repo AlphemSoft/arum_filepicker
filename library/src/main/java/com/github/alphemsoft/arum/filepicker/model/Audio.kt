@@ -11,8 +11,9 @@ class Audio(
         selected: Boolean,
         size: Long,
         val duration: Long,
-        added: Long
-) : AbstractFile<Audio>(id, uri, ContentType.AUDIO, name, extension, selected, -1, size, added) {
+        added: Long,
+        physicalPath: String?
+) : AbstractFile<Audio>(id, uri, ContentType.AUDIO, name, extension, selected, -1, size, added, physicalPath) {
     override fun copy(): Audio {
         return Audio(
             id,
@@ -22,7 +23,8 @@ class Audio(
             selected,
             size,
             duration,
-            added
+            added,
+            physicalPath
         )
     }
 

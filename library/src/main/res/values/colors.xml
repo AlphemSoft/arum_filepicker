@@ -4,8 +4,19 @@
     <color name="color_button_main">#D92749</color>
     <color name="color_permission_request">#212121</color>
     <color name="color_content_background">#212121</color>
-    <color name="color_index_indicator">#E3BE18</color>
-    <color name="color_text_description">#F7D73A</color>
-    <color name="tab_selected_color">#FF5722</color>
+    <color name="color_index_indicator">#fff</color>
+    <color name="color_text_description">#E4F8EC</color>
+    <color name="color_text_item_audio_title">#88A0F7</color>
     <color name="tab_unselected_color">#707070</color>
+
+    <color name="color_content_background_start">#92A8B6</color>
+    <color name="color_content_background_end">#81939F</color>
+    <color name="color_background_generic_file">#1A1D3A</color>
+    <color name="color_tab_layout_stroke">#1A1D3A</color>
+    <color name="tab_selected_color">@color/color_tab_layout_stroke</color>
+    <color name="color_button_send">#448AFF</color>
+    <color name="color_selected_index_indicator">#000</color>
+    <color name="color_selected_index_solid">#212121</color>
+    <color name="color_selected_index_stroke">#2A7E57C2</color>
+    <color name="color_selected_index_number">#fff</color>
 </resources>

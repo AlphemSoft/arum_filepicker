@@ -2,7 +2,7 @@ package com.github.alphemsoft.arum.filepicker.list.viewholder
 
 import android.view.View
 import com.bumptech.glide.Glide
-import com.omensoft.arum.filepicker.databinding.ItemVideoBinding
+import com.github.alphemsoft.arum.filepicker.databinding.ItemVideoBinding
 import com.github.alphemsoft.arum.filepicker.list.FileAdapter
 import com.github.alphemsoft.arum.filepicker.model.Video
 import com.github.alphemsoft.arum.filepicker.util.Duration

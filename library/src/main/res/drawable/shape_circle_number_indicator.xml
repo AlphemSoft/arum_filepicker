@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shape android:shape="oval"
     xmlns:android="http://schemas.android.com/apk/res/android">
-    <solid android:color="@color/color_index_indicator"/>
+    <solid android:color="@color/color_selected_index_solid"/>
+    <stroke android:color="@color/color_selected_index_stroke" android:width="3dp"/>
 </shape>

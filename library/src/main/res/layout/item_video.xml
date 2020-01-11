@@ -23,18 +23,17 @@
             android:id="@+id/tv_index_indicator"
             android:layout_width="32dp"
             android:layout_height="32dp"
-            android:background="@drawable/shape_circle_number_indicator"
             android:gravity="center"
             android:text="1"
             android:textAlignment="center"
-            android:textColor="@android:color/white"
             android:textSize="12sp"
             android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/iv_content"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/iv_content"
-            tools:ignore="HardcodedText" />
+            tools:ignore="HardcodedText"
+            style="@style/SelectedPictureAndVideoStyle" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tv_duration"

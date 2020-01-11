@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
-import com.omensoft.arum.filepicker.databinding.FragmentContentPageBinding
+import com.github.alphemsoft.arum.filepicker.databinding.FragmentContentPageBinding
 import com.github.alphemsoft.arum.filepicker.decoration.FairSpaceItemDecoration
 import com.github.alphemsoft.arum.filepicker.enums.ContentType
 import com.github.alphemsoft.arum.filepicker.enums.ContentType.*
@@ -24,7 +24,6 @@ class ContentPageFragment: Fragment(), FileAdapter.OnItemSelected {
     private lateinit var mDataBinding: FragmentContentPageBinding
 
     private lateinit var mViewModel: FilePickerViewModel
-    private lateinit var fileProvider: FileProvider
     private lateinit var mContentType: ContentType
     private lateinit var mFileAdapter: FileAdapter
     companion object {
@@ -99,9 +98,8 @@ class ContentPageFragment: Fragment(), FileAdapter.OnItemSelected {
     }
 
     private fun setupStateChangers() {
-        fileProvider = FileProvider.getInstance()!!
         mDataBinding.btPermissionGrant.setOnClickListener {
-            fileProvider.requestPermission()
+            mViewModel.requestReadStoragePermission()
         }
     }
 

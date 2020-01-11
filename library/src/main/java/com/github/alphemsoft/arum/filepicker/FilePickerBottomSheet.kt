@@ -1,21 +1,18 @@
 package com.github.alphemsoft.arum.filepicker
 
-import android.graphics.*
+import android.content.DialogInterface
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.viewpager2.widget.ViewPager2
-import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.google.android.material.tabs.TabLayout
-import com.google.android.material.tabs.TabLayoutMediator
-import com.omensoft.arum.filepicker.databinding.FragmentFilepickerBinding
+import com.github.alphemsoft.arum.filepicker.databinding.FragmentFilepickerBinding
 import com.github.alphemsoft.arum.filepicker.enums.ContentType
 import com.github.alphemsoft.arum.filepicker.model.Audio
 import com.github.alphemsoft.arum.filepicker.model.GenericFile
@@ -24,19 +21,22 @@ import com.github.alphemsoft.arum.filepicker.model.Video
 import com.github.alphemsoft.arum.filepicker.paging.ContentPageAdapter
 import com.github.alphemsoft.arum.filepicker.paging.ShowableFragment
 import com.github.alphemsoft.arum.filepicker.provider.FileProvider
-import com.github.alphemsoft.arum.filepicker.provider.OnFileSelectedListener
 import com.github.alphemsoft.arum.filepicker.util.ScreenUtils
 import com.github.alphemsoft.arum.filepicker.util.extension.setIconColor
 import com.github.alphemsoft.arum.filepicker.viewmodel.FilePickerViewModel
-import com.omensoft.arum.filepicker.R
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
 
 
-class FilePicker internal constructor(): BottomSheetDialogFragment(), FileProvider.FileProviderCallback {
+class FilePickerBottomSheet internal constructor(): BottomSheetDialogFragment(), FileProvider.FileProviderCallback {
 
-    private lateinit var listener: OnFileSelectedListener
     private lateinit var mViewModel: FilePickerViewModel
     private lateinit var mDataBinding: FragmentFilepickerBinding
-    private lateinit var fileProvider: FileProvider
+    private lateinit var mFileProvider: FileProvider
+    private lateinit var mParams: ArumFilePicker.Params
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -45,11 +45,14 @@ class FilePicker internal constructor(): BottomSheetDialogFragment(), FileProvid
     ): View? {
         mViewModel = ViewModelProviders.of(activity!!).get(FilePickerViewModel::class.java)
         mDataBinding = FragmentFilepickerBinding.inflate(inflater, container, false)
-        fileProvider = FileProvider.getInstance(
-            this.viewLifecycleOwner,
-            this.activity!!,
-            this
-        )
+        mFileProvider = FileProvider(this.requireActivity(), this)
+        mParams.genericFileExtensions?.let {
+            mFileProvider.supportedFileExtensions = it
+        }
+        mParams.supportedMimeTypes?.let {
+            mFileProvider.supportedFileMimeTypes = it
+        }
+        mFileProvider.registerLifeCycle(activity!!)
         setupViews()
         setupExpandedState()
         setupPages()
@@ -137,7 +140,7 @@ class FilePicker internal constructor(): BottomSheetDialogFragment(), FileProvid
             })
             mViewModel.currentContentType.value = pages[0].contentType
             val icons = pages.map {showableFragment->
-                ContextCompat.getDrawable(context?.applicationContext!!, showableFragment.icon)
+                ResourcesCompat.getDrawable(resources, showableFragment.icon, activity?.theme)
             }
             mDataBinding.tabLayout.addOnTabSelectedListener(object: TabLayout.OnTabSelectedListener{
                 override fun onTabReselected(tab: TabLayout.Tab?) {
@@ -186,13 +189,26 @@ class FilePicker internal constructor(): BottomSheetDialogFragment(), FileProvid
                     list?.let {safeSelectedList->
                         mDataBinding.fabSend.visibility = if (safeSelectedList.isEmpty()) View.GONE else View.VISIBLE
                         mDataBinding.fabSend.setOnClickListener {
-                            listener.onFilesReadyListener(safeSelectedList, safeContentType)
+                            mParams.listener.onFilesReadyListener(safeSelectedList, safeContentType)
+                            mViewModel.clearSelectedLists()
                             dismiss()
                         }
                     }
                 })
             }
         })
+
+        mViewModel.requestPermissionLiveData.observe(this, Observer {
+            it?.use()?.let {
+                mFileProvider.requestPermission()
+            }
+        })
+    }
+
+    override fun onDismiss(dialog: DialogInterface) {
+        super.onDismiss(dialog)
+        mViewModel.clearSelectedLists()
+        mDataBinding.tabLayout.getTabAt(0)?.select()
     }
 
     override fun onPermissionChange(permissionState: FileProvider.PermissionState) {
@@ -216,11 +232,12 @@ class FilePicker internal constructor(): BottomSheetDialogFragment(), FileProvid
     }
 
     internal companion object{
+
         const val TAG = "ARUM_FILE_PICKER_INSTANCE"
         fun getInstance(
-            listener: OnFileSelectedListener
-        ) = FilePicker().apply {
-            this.listener = listener
+            params: ArumFilePicker.Params
+        ) = FilePickerBottomSheet().apply {
+            mParams = params
         }
     }
 }

@@ -12,7 +12,8 @@ abstract class AbstractFile<out T: AbstractFile<T>>(
     var selected: Boolean,
     var selectedIndex: Int,
     val size: Long,
-    val added: Long
+    val added: Long,
+    val physicalPath: String?
 ): Comparable<AbstractFile<*>>{
     override fun toString(): String {
         return "Uri: $uri, Selected: $selected, Index: $selectedIndex"

@@ -19,21 +19,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fab_send"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:clickable="true"
-            android:focusable="true"
-            android:foregroundGravity="center"
-            android:textAlignment="center"
-            app:fabCustomSize="50dp"
-            app:layout_constraintBottom_toTopOf="@+id/guideline"
-            app:layout_constraintEnd_toStartOf="@+id/guideline3"
-            app:layout_constraintStart_toStartOf="@+id/guideline3"
-            app:layout_constraintTop_toTopOf="@+id/guideline"
-            app:srcCompat="@drawable/ic_send"
-            app:tint="@android:color/white" />
+
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/appCompatImageView"
@@ -73,7 +59,9 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:cardCornerRadius="8dp">
+            app:cardCornerRadius="8dp"
+            app:strokeWidth="2dp"
+            app:strokeColor="@color/color_tab_layout_stroke">
 
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/tabLayout"
@@ -98,6 +86,23 @@
             app:layout_constraintGuide_begin="230dp"
             app:layout_constraintGuide_percent="0.8"/>
 
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_send"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:foregroundGravity="center"
+            android:textAlignment="center"
+            app:fabCustomSize="50dp"
+            app:layout_constraintBottom_toTopOf="@+id/guideline"
+            app:layout_constraintEnd_toStartOf="@+id/guideline3"
+            app:layout_constraintStart_toStartOf="@+id/guideline3"
+            app:layout_constraintTop_toTopOf="@+id/guideline"
+            app:srcCompat="@drawable/ic_send"
+            app:backgroundTint="@color/color_button_send"
+            app:tint="@android:color/white"
+            android:elevation="12dp"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

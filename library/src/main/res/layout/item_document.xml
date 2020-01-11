@@ -6,7 +6,12 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/cl_container">
+        android:id="@+id/cl_container"
+        android:background="@drawable/shape_rounded_generic_file"
+        android:layout_marginTop="4dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
+        >
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/view_foreground"
@@ -32,25 +37,23 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/guideline4"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:textColor="@android:color/white"/>
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tv_file_name"
             android:layout_width="0dp"
-            android:layout_height="19dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginTop="8dp"
             android:text="Skrillex - Cinema"
             android:textAppearance="?android:textAppearanceSmall"
-            android:textColor="@android:color/black"
-            android:textStyle="bold"
-            android:ellipsize="marquee"
             app:layout_constraintEnd_toStartOf="@+id/guideline4"
             app:layout_constraintStart_toStartOf="@+id/guideline2"
             app:layout_constraintTop_toTopOf="parent"
-            android:singleLine="true"
-            tools:ignore="HardcodedText" />
+            tools:ignore="HardcodedText"
+            style="@style/ItemTextNameStyle"/>
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tv_position"
@@ -69,7 +72,8 @@
             app:layout_constraintEnd_toStartOf="@+id/guideline2"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="HardcodedText" />
+            tools:ignore="HardcodedText"
+            style="@style/ItemTextIndexStyle"/>
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline2"
@@ -91,7 +95,7 @@
             app:layout_constraintTop_toBottomOf="@+id/tv_file_name"
             tools:ignore="HardcodedText"
             app:textAllCaps="true"
-            android:textColor="@color/color_button_main"/>
+            style="@style/ItemTextDescriptionStyle"/>
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline4"

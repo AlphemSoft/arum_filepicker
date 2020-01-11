@@ -6,6 +6,16 @@
     android:layout_height="match_parent"
     tools:context="com.github.alphemsoft.arum.filepicker.app.MainActivity">
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="0dp"
+        android:layout_height="?attr/actionBarSize"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        style="@style/ToolbarTheme"
+        app:subtitle="A nice filepicker"/>
+
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/bt_open_filepicker"
         android:layout_width="wrap_content"

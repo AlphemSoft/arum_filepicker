@@ -5,7 +5,7 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        >
+        android:background="@drawable/shape_gradient_content_background">
 
 
         <androidx.recyclerview.widget.RecyclerView
@@ -18,9 +18,9 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.0"
-            android:background="@color/color_content_background"
             android:paddingBottom="@dimen/dimen_tab_layout_height_plus_padding"
-            android:clipToPadding="false"/>
+            android:clipToPadding="false"
+            />
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/iv_permission_request_icon"

@@ -11,8 +11,20 @@ class GenericFile(
         selected: Boolean,
         size: Long,
         added: Long,
-        val mimeType: String
-): AbstractFile<GenericFile>(id, uri, ContentType.GENERIC_FILE, name, extension, selected, -1, size, added) {
+        val mimeType: String?,
+        physicalPath: String?
+): AbstractFile<GenericFile>(
+    id,
+    uri,
+    ContentType.GENERIC_FILE,
+    name,
+    extension,
+    selected,
+    -1,
+    size,
+    added,
+    physicalPath
+) {
     override fun copy(): GenericFile {
         return GenericFile(
             id,
@@ -22,7 +34,8 @@ class GenericFile(
             selected,
             size,
             added,
-            mimeType
+            mimeType,
+            physicalPath
         )
     }
 

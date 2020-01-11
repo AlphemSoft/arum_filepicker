@@ -6,6 +6,7 @@ import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import com.github.alphemsoft.arum.filepicker.enums.ContentType
 import com.github.alphemsoft.arum.filepicker.model.*
+import com.github.alphemsoft.arum.filepicker.util.Usable
 import kotlin.collections.ArrayList
 
 class FilePickerViewModel: ViewModel(){
@@ -17,6 +18,8 @@ class FilePickerViewModel: ViewModel(){
     val videos: MutableLiveData<List<Video>> = MutableLiveData()
     val genericFiles: MutableLiveData<List<GenericFile>> = MutableLiveData()
 
+    val requestPermissionLiveData = MutableLiveData<Usable<Boolean>>()
+
     val showablePictures = Transformations.map(pictures, ::transformFiles)
     val showableAudios = Transformations.map(audios, ::transformFiles)
     val showableVideos = Transformations.map(videos, ::transformFiles)
@@ -26,6 +29,10 @@ class FilePickerViewModel: ViewModel(){
     val selectedAudios = Transformations.map(audios, ::transformSelectedFiles)
     val selectedVideos = Transformations.map(videos, ::transformSelectedFiles)
     val selectedGenericFiles = Transformations.map(genericFiles, ::transformSelectedFiles)
+
+    init {
+        requestPermissionLiveData.value = null
+    }
 
     private fun transformSelectedFiles(fileList: List<AbstractFile<*>>?): List<AbstractFile<*>>{
         val selectedFiles: List<Uri>? = getSelectedFileList(fileList)
@@ -107,5 +114,16 @@ class FilePickerViewModel: ViewModel(){
 
         list.value = list.value
 
+    }
+
+    fun requestReadStoragePermission() {
+        requestPermissionLiveData.value = Usable(true)
+    }
+
+    fun clearSelectedLists() {
+        _selectedPictures.clear()
+        _selectedVideos.clear()
+        _selectedAudios.clear()
+        _selectedGenericFiles.clear()
     }
 }

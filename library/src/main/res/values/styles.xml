@@ -8,14 +8,19 @@
     </style>
 
     <style name="ItemTextDescriptionStyle" parent="Widget.MaterialComponents.TextView">
-        <item name="android:textColor">@color/color_index_indicator</item>
+        <item name="android:textColor">@color/color_text_description</item>
         <item name="android:textAllCaps">true</item>
     </style>
 
     <style name="ItemTextNameStyle" parent="Widget.MaterialComponents.TextView">
         <item name="android:ellipsize">marquee</item>
-        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textColor">@color/color_text_item_audio_title</item>
         <item name="android:singleLine">true</item>
+    </style>
+
+    <style name="SelectedPictureAndVideoStyle" parent="Widget.MaterialComponents.TextView">
+        <item name="android:background">@drawable/shape_circle_number_indicator</item>
+        <item name="android:textColor">@color/color_selected_index_number</item>
     </style>
 
 

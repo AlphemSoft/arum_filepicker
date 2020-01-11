@@ -5,10 +5,10 @@ import android.view.ViewGroup
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.omensoft.arum.filepicker.databinding.ItemAudioBinding
-import com.omensoft.arum.filepicker.databinding.ItemDocumentBinding
-import com.omensoft.arum.filepicker.databinding.ItemPictureBinding
-import com.omensoft.arum.filepicker.databinding.ItemVideoBinding
+import com.github.alphemsoft.arum.filepicker.databinding.ItemAudioBinding
+import com.github.alphemsoft.arum.filepicker.databinding.ItemDocumentBinding
+import com.github.alphemsoft.arum.filepicker.databinding.ItemPictureBinding
+import com.github.alphemsoft.arum.filepicker.databinding.ItemVideoBinding
 import com.github.alphemsoft.arum.filepicker.enums.ContentType
 import com.github.alphemsoft.arum.filepicker.list.viewholder.*
 import com.github.alphemsoft.arum.filepicker.model.AbstractFile

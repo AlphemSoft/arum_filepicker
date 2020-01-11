@@ -1,15 +1,20 @@
 package com.github.alphemsoft.arum.filepicker.list.viewholder
 
 import android.webkit.MimeTypeMap
-import com.omensoft.arum.filepicker.databinding.ItemDocumentBinding
+import androidx.lifecycle.ViewModel
+import com.github.alphemsoft.arum.filepicker.R
+import com.github.alphemsoft.arum.filepicker.databinding.ItemDocumentBinding
 import com.github.alphemsoft.arum.filepicker.list.FileAdapter
 import com.github.alphemsoft.arum.filepicker.model.GenericFile
+import com.github.alphemsoft.arum.filepicker.util.CustomMimeTypeMap
+import com.github.alphemsoft.arum.filepicker.util.extension.changeStateColorWithRes
 
 class GenericFileViewHolder(viewDataBinding: ItemDocumentBinding)
     : FileViewHolder<ItemDocumentBinding, GenericFile>(viewDataBinding) {
 
     override fun bind(file: GenericFile, onItemSelectListener: FileAdapter.OnItemSelected) {
         mDataBinding.cbSelectedItem.apply {
+            changeStateColorWithRes(R.color.tab_state_selector)
             mDataBinding.cbSelectedItem.isChecked = false
             setOnClickListener {
                 onItemSelectListener.onItemSelected(file)
@@ -22,7 +27,14 @@ class GenericFileViewHolder(viewDataBinding: ItemDocumentBinding)
         }
         mDataBinding.tvPosition.text = (adapterPosition+1).toString()
         mDataBinding.tvFileName.text = file.name
-        mDataBinding.tvDescription.text = MimeTypeMap.getSingleton().getExtensionFromMimeType(file.mimeType)
+        val mimeTypeMap = MimeTypeMap.getSingleton()
+        if (mimeTypeMap.hasMimeType(file.mimeType?:"")){
+            mDataBinding.tvDescription.text =
+                mimeTypeMap.getExtensionFromMimeType(file.mimeType)
+        }else if (CustomMimeTypeMap.hasMimeType(file.mimeType)){
+            mDataBinding.tvDescription.text =
+                CustomMimeTypeMap.getExtensionFromMimeType(file.mimeType!!)
+        }
         mDataBinding.clContainer.setOnClickListener {
             onItemSelectListener.onItemSelected(file)
         }

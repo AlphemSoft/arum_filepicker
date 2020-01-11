@@ -11,8 +11,9 @@ class Video(
         selected: Boolean = false,
         size: Long,
         val duration: Long,
-        added: Long
-): AbstractFile<Video>(id, uri, ContentType.VIDEO, name, extension, selected, -1, size, added) {
+        added: Long,
+        physicalPath: String?
+): AbstractFile<Video>(id, uri, ContentType.VIDEO, name, extension, selected, -1, size, added, physicalPath) {
     override fun copy(): Video {
         return Video(
             id,
@@ -22,7 +23,8 @@ class Video(
             selected,
             size,
             duration,
-            added
+            added,
+            physicalPath
         )
     }
 }
