@@ -8,8 +8,10 @@ import android.provider.MediaStore
 import android.util.Log
 import android.webkit.MimeTypeMap
 import androidx.core.app.ActivityCompat
+import androidx.core.app.ActivityCompat.requestPermissions
 import androidx.core.content.ContentResolverCompat
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
@@ -29,14 +31,18 @@ class FileProvider constructor(
             = arrayOf("doc", "docx", "ppt", "pptx", "xls", "xlsx", "pdf")
         set(value) {
             field = value
-            provideMisc()
+            if (ContextCompat.checkSelfPermission(mActivity, android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED){
+                provideMisc()
+            }
         }
 
     internal var supportedFileMimeTypes: Array<String>
             = emptyArray()
         set(value) {
             field = value
-            provideMisc()
+            if (ContextCompat.checkSelfPermission(mActivity, android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED){
+                provideMisc()
+            }
         }
 
     init {
@@ -62,12 +68,12 @@ class FileProvider constructor(
     }
 
     companion object{
-        private const val REQUEST_CODE = 4991
+        const val REQUEST_CODE = 4991
     }
 
 
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
-    private fun checkForReadStoragePermission(){
+    fun checkForReadStoragePermission(){
         when(ContextCompat.checkSelfPermission(mActivity, android.Manifest.permission.READ_EXTERNAL_STORAGE)){
             PackageManager.PERMISSION_GRANTED->  {
                 fileProviderCallback.onPermissionChange(PermissionState.GRANTED)
@@ -336,10 +342,13 @@ class FileProvider constructor(
         fileProviderCallback.dispatchDocumentList(miscList.toList())
     }
 
-    fun requestPermission(){
-        ActivityCompat.requestPermissions(mActivity, arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE),
-            REQUEST_CODE
-        )
+    fun requestPermission(fragment: Fragment){
+        if (ContextCompat.checkSelfPermission(mActivity, android.Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
+            fragment.requestPermissions(arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE),
+                REQUEST_CODE
+            )
+        }
+
     }
 
 

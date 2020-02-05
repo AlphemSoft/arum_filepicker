@@ -1,6 +1,7 @@
 package com.github.alphemsoft.arum.filepicker
 
 import android.content.DialogInterface
+import android.content.pm.PackageManager
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -200,7 +201,7 @@ class FilePickerBottomSheet internal constructor(): BottomSheetDialogFragment(),
 
         mViewModel.requestPermissionLiveData.observe(this, Observer {
             it?.use()?.let {
-                mFileProvider.requestPermission()
+                mFileProvider.requestPermission(this)
             }
         })
     }
@@ -238,6 +239,20 @@ class FilePickerBottomSheet internal constructor(): BottomSheetDialogFragment(),
             params: ArumFilePicker.Params
         ) = FilePickerBottomSheet().apply {
             mParams = params
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        when(requestCode){
+            FileProvider.REQUEST_CODE ->{
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                    mFileProvider.checkForReadStoragePermission()
+                }
+            }
         }
     }
 }
