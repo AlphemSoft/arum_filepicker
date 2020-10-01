@@ -14,6 +14,9 @@ class ArumFilePicker(params: Params) {
     }
 
     fun show(fragmentManager: FragmentManager){
+        if (instance.isAdded){
+            instance.dismiss()
+        }
         instance.show(fragmentManager,
             FilePickerBottomSheet.TAG
         )
